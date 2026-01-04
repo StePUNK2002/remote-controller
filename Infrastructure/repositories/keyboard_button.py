@@ -1,3 +1,6 @@
+from Infrastructure.repositories.mouse_cursor_strategy import MacOSStrategy
+from Infrastructure.repositories.mouse_cursor_strategy.context import Context
+from Infrastructure.repositories.mouse_cursor_strategy.windowsStrategy import WindowsStrategy
 from entities.keyboard_button import KeyboardButtonEntity
 from interface.keyboard_button import IKeyboardButtonRepository
 import pyautogui
@@ -20,6 +23,11 @@ class KeyboardButtonRepositoryImpl(IKeyboardButtonRepository):
             'Ж': ':', 'Э': '"', 'Я': 'Z', 'Ч': 'X', 'С': 'C', 'М': 'V', 'И': 'B',
             'Т': 'N', 'Ь': 'M', 'Б': '<', 'Ю': '>', 'Ё': '~'
         }
+        self._strategys = {
+            "Windows": WindowsStrategy,
+            "Darwin": MacOSStrategy
+        }
+        self._stategy_context = Context(self._strategys[platform.system()]())
     
     def _convert_to_english_key(self, name: str) -> str:
         """Конвертирует русский символ в соответствующую английскую клавишу."""
@@ -31,37 +39,13 @@ class KeyboardButtonRepositoryImpl(IKeyboardButtonRepository):
         # Конвертируем символ, если это русская буква
         converted_name = self._convert_to_english_key(name)
         
-        if platform.system() == 'Windows':
-            # Получаем scan code клавиши (опционально)
-            try:
-                # Пытаемся получить scan code
-                scan_code = keyboard.key_to_scan_codes(converted_name)
-                print(f"Код клавиши {converted_name}: {scan_code}")
-            except:
-                print(f"Не удалось получить код для клавиши {converted_name}")
-            
-            # Зажимаем клавишу
-            keyboard.press(converted_name)
-        else:
-            pyautogui.keyUp(converted_name)
+        self._stategy_context.press_button_down_by_name(converted_name)
         
         return KeyboardButtonEntity(button_name=name) 
     
     def press_button_up_by_name(self, name: str) -> KeyboardButtonEntity:
         converted_name = self._convert_to_english_key(name)
 
-        if platform.system() == 'Windows':
-            # Получаем scan code клавиши (опционально)
-            try:
-                # Пытаемся получить scan code
-                scan_code = keyboard.key_to_scan_codes(converted_name)
-                print(f"Код клавиши {converted_name}: {scan_code}")
-            except:
-                print(f"Не удалось получить код для клавиши {converted_name}")
-            
-            # Зажимаем клавишу
-            keyboard.release(converted_name)
-        else:
-            pyautogui.keyDown(converted_name)
+        self._stategy_context.press_button_up_by_name(converted_name)
         
         return KeyboardButtonEntity(button_name=name)   
