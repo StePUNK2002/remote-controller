@@ -1,11 +1,9 @@
-from Infrastructure.repositories.mouse_cursor_strategy import MacOSStrategy
+from Infrastructure.repositories.mouse_cursor_strategy.MacOSStrategy import MacOSStrategy
 from Infrastructure.repositories.mouse_cursor_strategy.context import Context
 from Infrastructure.repositories.mouse_cursor_strategy.windowsStrategy import WindowsStrategy
 from entities.keyboard_button import KeyboardButtonEntity
 from interface.keyboard_button import IKeyboardButtonRepository
-import pyautogui
 import platform
-import keyboard
 
 class KeyboardButtonRepositoryImpl(IKeyboardButtonRepository):
     def __init__(self):
