@@ -36,7 +36,6 @@ async def press_button_up_by_name(button_name: str):
     status_code=200
 )
 async def press_and_release(button_name: str):
-    print(button_name)
     press_button_down_by_name_use_case = container.press_button_down_by_name_use_case()
     press_button_up_by_name_use_case = container.press_button_up_by_name_use_case()
     result = press_button_down_by_name_use_case.execute(button_name)
