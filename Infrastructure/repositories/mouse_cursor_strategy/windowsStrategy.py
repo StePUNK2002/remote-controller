@@ -101,7 +101,7 @@ class WindowsStrategy(Strategy):
             'Т': 'N', 'Ь': 'M', 'Б': '<', 'Ю': '>',
             'Ё': '~'
         }
-        return russian_to_english.get(name, name)
+        return russian_to_english.get(name, name).lower()
     
     def _normalize_single_key(self, key: str) -> str:
         """Нормализует одиночную клавишу"""
