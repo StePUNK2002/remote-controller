@@ -7,3 +7,4 @@ class MacOSStrategy(Strategy):
     
     def press_button_up_by_name(self, name: str):
         pyautogui.keyUp(name)
+        
