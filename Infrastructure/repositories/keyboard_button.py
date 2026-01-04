@@ -55,6 +55,6 @@ class KeyboardButtonRepositoryImpl(IKeyboardButtonRepository):
             print(f"Не удалось получить код для клавиши {converted_name}")
         
         # Зажимаем клавишу
-        keyboard.release(scan_code)ап
+        keyboard.release(scan_code)
         
         return KeyboardButtonEntity(button_name=name)   
