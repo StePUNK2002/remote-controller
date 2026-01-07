@@ -65,12 +65,6 @@ form:nth-of-type(3) button {
 </form>
 
 <script>
-// Очередь запросов и система повторных попыток
-const requestQueue = [];
-let isProcessing = false;
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 500; // 0.5 секунды
-
 
 async function RightClickUp() {
     const url = '/mouse/right_click'; // URL вашего API
@@ -100,84 +94,6 @@ async function RightClickUp() {
 }
 
 
-// Функция для обработки очереди запросов
-function processQueue() {
-    if (isProcessing || requestQueue.length === 0) return;
-
-    isProcessing = true;
-    const { url, data, retries = 0, onSuccess } = requestQueue.shift();
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            if (onSuccess) onSuccess();
-            isProcessing = false;
-            setTimeout(processQueue, 0); // Обработать следующий запрос
-        } else {
-            handleRequestError(url, data, retries, onSuccess);
-        }
-    };
-
-    xhr.onerror = function() {
-        handleRequestError(url, data, retries, onSuccess);
-    };
-
-    xhr.send(data);
-}
-
-function handleRequestError(url, data, retries, onSuccess) {
-    if (retries < MAX_RETRIES) {
-        // Повторная попытка после задержки
-        setTimeout(() => {
-            requestQueue.unshift({ url, data, retries: retries + 1, onSuccess });
-            isProcessing = false;
-            processQueue();
-        }, RETRY_DELAY * (retries + 1));
-    } else {
-        // Максимальное количество попыток достигнуто
-        console.error(`Request to ${url} failed after ${MAX_RETRIES} attempts`);
-        isProcessing = false;
-        setTimeout(processQueue, 0); // Продолжить с другими запросами
-    }
-}
-
-// Функция для добавления запроса в очередь с учетом приоритета
-function addToQueueWithPriority(url, data, onSuccess = null) {
-    const newRequest = { url, data, onSuccess };
-
-    if (url === '/click') {
-        // Для /click вставляем в начало очереди
-        requestQueue.unshift(newRequest);
-    } else if (url === '/qwe') {
-        // Для /qwe проверяем, есть ли /click в очереди
-        const clickIndex = requestQueue.findIndex(req => req.url === '/click');
-
-        if (clickIndex !== -1) {
-            // Если есть /click, вставляем /qwe после него
-            requestQueue.splice(clickIndex + 1, 0, newRequest);
-        } else {
-            // Иначе добавляем в конец
-            requestQueue.push(newRequest);
-        }
-    } else {
-        // Для других запросов просто добавляем в конец
-        requestQueue.push(newRequest);
-    }
-
-    processQueue();
-}
-
-function sendRequest(startx, starty) {
-    addToQueueWithPriority('/click', 'xcoord=' + startx + '&ycoord=' + starty);
-}
-
-function sendRequest2(dist, dist2) {
-    mouseClickUp()
-}
-
 var inputField = document.getElementsByName('my_input')[0];
 inputField.value = '11111111111';
 document.getElementById("my_input").addEventListener("input", function() {
@@ -191,13 +107,6 @@ function showKeyboard() {
   inputField.focus();
 }
 
-function isContained(m, e) {
-  var e=e||window.event;
-  var c=/(click)|(mousedown)|(mouseup)/i.test(e.type)? e.target : ( e.relatedTarget || ((e.type=="mouseover")? e.fromElement : e.toElement) );
-  while (c && c!=m)try {c=c.parentNode} catch(e) { c=m; }
-  if (c==m) return true;
-  else return false;
-}
 
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {

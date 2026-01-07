@@ -1,0 +1,18 @@
+# Зависимости
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+
+# Среда разработки
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Сборка
+dist/
+build/
+out/
+*.exe
+*.dll

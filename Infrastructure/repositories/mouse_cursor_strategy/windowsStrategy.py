@@ -124,7 +124,6 @@ class WindowsStrategy(Strategy):
         """Нажимает клавишу (удерживает)"""
         try:
             normalized_name = self._normalize_key_name(name)
-            
             keyboard.press(normalized_name)
             print(f"Клавиша нажата: '{name}' -> '{normalized_name}'")
         except Exception as e:
