@@ -10,15 +10,19 @@ body {
   background-color: #000000;
 }
 .box {
-      width: 1150px;
-      height: 950px;
-      padding: 10px;
-      border: 1px;
-      background: #000000;
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    border: 1px;
+    background: #000000;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    z-index: 1;
+}
 button {
   position: fixed;
   top: 40px;
@@ -262,30 +266,38 @@ async function mouseClickUp() {
     }
 }
 
-  box1.addEventListener('touchmove', function(e) {
+box1.addEventListener('touchmove', function(e) {
     var touchobj = e.changedTouches[0];
-    var dist = parseInt(touchobj.clientX) - startx;
-    var dist2 = parseInt(touchobj.clientY) - starty;
-    statusdiv.innerHTML = 'Событие: touchmove<br /> Гориз. перемещение: ' + dist + 'px ' + dist2 + 'px';
+    var currentX = parseInt(touchobj.clientX);
+    var currentY = parseInt(touchobj.clientY);
+    
+    // Рассчитываем смещение с последней точки
+    var dist = currentX - startx;
+    var dist2 = currentY - starty;
+    
+    statusdiv.innerHTML = 'Событие: touchmove<br /> Гориз. перемещение: ' + dist + 'px, Вертик. перемещение: ' + dist2 + 'px';
     e.preventDefault();
-    if (click != 2) {click = 0;}
+    
+    if (click != 2) { click = 0; }
 
     if (e.touches.length == 1) {
-      if ((Math.abs(dist) % 7 == 0 || Math.abs(dist2) % 7 == 0)) {
+        // Отправляем смещение всегда при движении
         mouseoffset(dist, dist2);
-        startx = touchobj.clientX;
-        starty = touchobj.clientY;
-      }
+        
+        // Обновляем начальные координаты для следующего расчета
+        startx = currentX;
+        starty = currentY;
     }
+    
     if (e.touches.length == 2) {
-      if (Math.abs(dist2) % 10 == 0) {
-        addToQueueWithPriority('/scroll', 'answer=' + dist2);
-        startx = touchobj.clientX;
-        starty = touchobj.clientY;
-        scroll = true;
-      }
+        if (Math.abs(dist2) % 10 == 0) {
+            addToQueueWithPriority('/scroll', 'answer=' + dist2);
+            startx = currentX;
+            starty = currentY;
+            scroll = true;
+        }
     }
-  }, false);
+}, false);
 
   box1.addEventListener('touchend', function(e) {
     statusdiv.innerHTML = 'Событие: отпустил';
