@@ -1,6 +1,6 @@
-from Infrastructure.repositories.mouse_cursor_strategy.MacOSStrategy import MacOSStrategy
-from Infrastructure.repositories.mouse_cursor_strategy.context import Context
-from Infrastructure.repositories.mouse_cursor_strategy.windowsStrategy import WindowsStrategy
+from Infrastructure.repositories.keyboard_strategy.MacOSStrategy import MacOSStrategy
+from Infrastructure.repositories.keyboard_strategy.context import Context
+from Infrastructure.repositories.keyboard_strategy.windowsStrategy import WindowsStrategy
 from entities.keyboard_button import KeyboardButtonEntity
 from interface.keyboard_button import IKeyboardButtonRepository
 import platform
