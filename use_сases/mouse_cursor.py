@@ -29,3 +29,11 @@ class LeftClickDownUseCase(MouseCursorUseCase):
 class LeftClickUpUseCase(MouseCursorUseCase):
     def execute(self) -> bool:
         return self.mouse_cursor_service.left_click_up()
+
+class ScrollUpUseCase(MouseCursorUseCase):
+    def execute(self) -> bool:
+        return self.mouse_cursor_service.scroll_up()
+
+class ScrollDownUseCase(MouseCursorUseCase):
+    def execute(self) -> bool:
+        return self.mouse_cursor_service.scroll_down()

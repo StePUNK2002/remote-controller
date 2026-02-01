@@ -24,3 +24,9 @@ class MouseCursorService:
     def left_click_up(self) -> bool:
         return self.mouse_cursor_repository.left_click_up()
     
+    def scroll_up(self) -> bool:
+        return self.mouse_cursor_repository.scroll_up()
+
+    def scroll_down(self) -> bool:
+        return self.mouse_cursor_repository.scroll_down()
+    

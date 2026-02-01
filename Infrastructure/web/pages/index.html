@@ -221,6 +221,7 @@ async function mouseClickUp() {
 
   box1.addEventListener('touchstart', function(e) {
     e.preventDefault();
+    scroll = false;
     var touchobj = e.changedTouches[0];
     startx = parseInt(touchobj.clientX);
     starty = parseInt(touchobj.clientY);
@@ -266,6 +267,60 @@ async function mouseClickUp() {
     }
 }
 
+  async function mouseScrollDown() {
+    const url = '/mouse/scroll_down'; // URL вашего API
+    
+    const requestData = {};
+    
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // или другой метод, который использует ваш API
+            headers: {
+                'Content-Type': 'application/json',
+                // Добавьте другие заголовки если нужно
+            },
+            body: JSON.stringify(requestData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error sending mouse offset request:', error);
+        throw error;
+    }
+}
+
+async function mouseScrollUp() {
+    const url = '/mouse/scroll_up'; // URL вашего API
+    
+    const requestData = {};
+    
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // или другой метод, который использует ваш API
+            headers: {
+                'Content-Type': 'application/json',
+                // Добавьте другие заголовки если нужно
+            },
+            body: JSON.stringify(requestData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error sending mouse offset request:', error);
+        throw error;
+    }
+}
+
 box1.addEventListener('touchmove', function(e) {
     var touchobj = e.changedTouches[0];
     var currentX = parseInt(touchobj.clientX);
@@ -280,7 +335,7 @@ box1.addEventListener('touchmove', function(e) {
     
     if (click != 2) { click = 0; }
 
-    if (e.touches.length == 1) {
+    if (e.touches.length == 1 && scroll == false) {
         // Отправляем смещение всегда при движении
         mouseoffset(dist, dist2);
         
@@ -290,11 +345,19 @@ box1.addEventListener('touchmove', function(e) {
     }
     
     if (e.touches.length == 2) {
-        if (Math.abs(dist2) % 10 == 0) {
-            addToQueueWithPriority('/scroll', 'answer=' + dist2);
-            startx = currentX;
-            starty = currentY;
-            scroll = true;
+
+        if (Math.abs(dist2) % 3 == 0) {
+          if (dist2 > 0)
+        {
+          mouseScrollDown()
+        }
+        else
+        {
+          mouseScrollUp()
+        }
+        startx = currentX;
+        starty = currentY;
+        scroll = true;
         }
     }
 }, false);
@@ -329,7 +392,6 @@ box1.addEventListener('touchmove', function(e) {
 
 
     fingers = 0;
-    scroll = false;
   }, false);
 
   if (!detecttouch) {

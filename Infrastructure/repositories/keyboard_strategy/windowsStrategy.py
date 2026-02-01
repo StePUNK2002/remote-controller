@@ -7,7 +7,6 @@ import time
 try:
     hkl = ctypes.windll.user32.LoadKeyboardLayoutW("00000409", 1)
     ctypes.windll.user32.ActivateKeyboardLayout(hkl, 0)
-    print("Английская раскладка установлена")
 except Exception as e:
     print(f"Не удалось установить английскую раскладку: {e}")
 

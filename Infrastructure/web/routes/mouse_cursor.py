@@ -17,6 +17,30 @@ async def mouse_offset(entity: OffsetMouseCursorEntity):
     result = use_case.execute(entity)
     return result
 
+@router.post(
+    "/scroll_up",
+    summary="Скролить вверх",
+    response_model=bool,
+    status_code=200
+    
+)
+async def scroll_up_use_case():
+    use_case = container.scroll_up_use_case()
+    result = use_case.execute()
+    return result
+
+@router.post(
+    "/scroll_down",
+    summary="Скролить вниз",
+    response_model=bool,
+    status_code=200
+    
+)
+async def scroll_down_use_case():
+    use_case = container.scroll_down_use_case()
+    result = use_case.execute()
+    return result
+
 
 @router.post(
     "/click_down",

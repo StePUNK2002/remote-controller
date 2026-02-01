@@ -27,3 +27,11 @@ class IMouseCursorRepository(ABC):
     @abstractmethod
     def left_click_up() -> bool:
         pass
+
+    @abstractmethod
+    def scroll_up() -> bool:
+        pass
+
+    @abstractmethod
+    def scroll_down() -> bool:
+        pass

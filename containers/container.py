@@ -7,7 +7,7 @@ from use_сases.keyboard_button import PressButtonDownByNameUseCase, PressButton
 from use_сases.text import PrintTextUseCase, ReverseTextUseCase
 from Infrastructure.repositories.mouse_cursor import MouseCursorRepositoryImpl
 from services.mouse_cursor import MouseCursorService
-from use_сases.mouse_cursor import GetCurrentPositionCursorUseCase, LeftClickDownUseCase, LeftClickUpUseCase, OffSetPositionCursorUseCase, RightClickDownUseCase, RightClickUpUseCase
+from use_сases.mouse_cursor import GetCurrentPositionCursorUseCase, LeftClickDownUseCase, LeftClickUpUseCase, OffSetPositionCursorUseCase, RightClickDownUseCase, RightClickUpUseCase, ScrollDownUseCase, ScrollUpUseCase
 
 
 class Container(containers.DeclarativeContainer):
@@ -87,4 +87,14 @@ class Container(containers.DeclarativeContainer):
     press_button_up_by_name_use_case = providers.Factory(
         PressButtonUpByNameUseCase,
         keyboard_button_service=keyboard_button_service
+    )
+
+    scroll_up_use_case = providers.Factory(
+        ScrollUpUseCase,
+        mouse_cursor_service=mouse_cursor_service
+    )
+
+    scroll_down_use_case = providers.Factory(
+        ScrollDownUseCase,
+        mouse_cursor_service=mouse_cursor_service
     )

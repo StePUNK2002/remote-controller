@@ -47,3 +47,19 @@ class MouseCursorRepositoryImpl(IMouseCursorRepository):
         except Exception as e:
             print(f"Ошибка {e}")
             return False
+    
+    def scroll_up(self) -> bool:
+        try:
+            pyautogui.scroll(80)
+            return True
+        except Exception as e:
+            print(f"Ошибка {e}")
+            return False
+
+    def scroll_down(self) -> bool:
+        try:
+            pyautogui.scroll(-80)
+            return True
+        except Exception as e:
+            print(f"Ошибка {e}")
+            return False
