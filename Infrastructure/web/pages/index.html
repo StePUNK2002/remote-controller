@@ -156,7 +156,8 @@ window.addEventListener('load', function() {
   var isBlocked = false;
   var click = 0;
   var scroll = false;
-
+let lastScrollDirection = null; // 'up' или 'down'
+let directionChanged = false;
   var detecttouch = !!('ontouchstart' in window) || !!('ontouchstart' in document.documentElement) ||
                     !!window.ontouchstart || !!window.Touch || !!window.onmsgesturechange ||
                     (window.DocumentTouch && window.document instanceof window.DocumentTouch);
@@ -345,21 +346,39 @@ box1.addEventListener('touchmove', function(e) {
     }
     
     if (e.touches.length == 2) {
-
-        if (Math.abs(dist2) % 2 == 0) {
-          if (dist2 > 0)
-        {
-          mouseScrollDown()
-        }
-        else
-        {
-          mouseScrollUp()
+    const minSwipeDistance = 15;
+    
+    // Определяем текущее направление
+    const currentDirection = dist2 > 0 ? 'down' : 'up';
+    
+    // Проверяем, сменилось ли направление
+    if (lastScrollDirection && lastScrollDirection !== currentDirection) {
+        directionChanged = true;
+        lastScrollDirection = currentDirection;
+    } else {
+        directionChanged = false;
+        lastScrollDirection = currentDirection;
+    }
+    
+    // Сбрасываем начальные координаты при смене направления
+    if (directionChanged) {
+        startx = currentX;
+        starty = currentY;
+        return; // Не прокручиваем при смене направления
+    }
+    
+    // Проверяем порог и прокручиваем
+    if (Math.abs(dist2) > minSwipeDistance) {
+        if (dist2 > 0) {
+            mouseScrollDown();
+        } else {
+            mouseScrollUp();
         }
         startx = currentX;
         starty = currentY;
         scroll = true;
-        }
     }
+}
 }, false);
 
   box1.addEventListener('touchend', function(e) {
